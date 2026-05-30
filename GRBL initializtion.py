@@ -1,8 +1,3 @@
-
-"""
-Ініціалізація GRBL та зв'язок з вимірювальним вузлом.
-Базується на simple_stream.py (gnea/grbl, MIT License).
-"""
 import serial
 import time
 
