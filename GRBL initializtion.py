@@ -9,10 +9,6 @@ grbl = serial.Serial(GRBL_PORT, BAUD, timeout=10)
 meas = serial.Serial(MEAS_PORT, BAUD, timeout=5)
 
 def grbl_send(cmd: str) -> str:
-    """
-    Надіслати G-код команду GRBL, дочекатись відповіді 'ok' або 'error'.
-    Патерн: send -> wait -> receive (simple_stream.py).
-    """
     grbl.write((cmd.strip() + '\n').encode('ascii'))
     while True:
         line = grbl.readline().decode('ascii', errors='ignore').strip()
@@ -23,7 +19,6 @@ def grbl_send(cmd: str) -> str:
             return line
 
 def grbl_init():
-    """Пробудження GRBL — точна послідовність з simple_stream.py."""
     grbl.write(b'\r\n\r\n')    
     time.sleep(2)               
     grbl.flushInput()          
@@ -35,7 +30,6 @@ def grbl_init():
     print('GRBL initialized.')
 
 def read_photocurrent() -> float:
-    """Запустити FSM на Arduino #2, отримати дельта-сигнал (V_light - V_dark)."""
     meas.write(b'MEASURE\n')
     while True:
         line = meas.readline().decode('ascii', errors='ignore').strip()
