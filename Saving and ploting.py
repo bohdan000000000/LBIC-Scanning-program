@@ -4,15 +4,10 @@ from scipy.ndimage import gaussian_filter
 import csv
 
 def normalize(data: np.ndarray) -> np.ndarray:
-    """Лінійне нормування до діапазону [0, 1]."""
     mn, mx = data.min(), data.max()
     return (data - mn) / (mx - mn + 1e-12)
 
 def correct_background(data: np.ndarray, bg_rows: int = 5) -> np.ndarray:
-    """
-    Корекція нерівномірного фону: відніманням середнього
-    по перших і останніх рядках зображення (поза зразком).
-    """
     bg = np.mean(np.vstack([data[:bg_rows], data[-bg_rows:]]), axis=0)
     return np.clip(data - bg, 0, None)
 
@@ -27,7 +22,6 @@ def save_csv(data: np.ndarray, xs: np.ndarray,
 
 def plot_lbic_map(data: np.ndarray, xs: np.ndarray,
                   ys: np.ndarray, smooth: float = 0.5):
-    """Теплова карта розподілу фотоструму + гістограма сигналу."""
     z = normalize(correct_background(data))
     if smooth > 0:
         z = gaussian_filter(z, sigma=smooth)  # гаусове згладжування
